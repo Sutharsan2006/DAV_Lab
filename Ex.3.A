@@ -1,0 +1,148 @@
+
+#3.A
+import pandas as pd
+import numpy as np
+from scipy.stats import skew, kurtosis
+
+# Load datasets
+uci_diabetes = pd.read_csv("uci_diabetes.csv")
+pima_diabetes = pd.read_csv("pima_diabetes.csv")
+
+# Display first 5 rows
+print("UCI Diabetes Dataset")
+print(uci_diabetes.head())
+
+print("\nPima Diabetes Dataset")
+print(pima_diabetes.head())
+
+# Print column names
+print("\nUCI Columns:")
+print(uci_diabetes.columns.tolist())
+
+print("\nPima Columns:")
+print(pima_diabetes.columns.tolist())
+
+# Numerical columns
+numerical_columns = [
+    "Glucose",
+    "BloodPressure",
+    "SkinThickness",
+    "Insulin",
+    "BMI",
+    "DiabetesPedigreeFunction",
+    "Age"
+]
+
+# Function for univariate analysis
+def univariate_analysis(df, columns):
+
+    result = []
+
+    for col in columns:
+
+        if col in df.columns:
+
+            data = df[col].dropna()
+
+            result.append({
+                "Feature": col,
+                "Mean": data.mean(),
+                "Median": data.median(),
+                "Mode": data.mode().iloc[0],
+                "Variance": data.var(),
+                "Standard Deviation": data.std(),
+                "Skewness": skew(data),
+                "Kurtosis": kurtosis(data)
+            })
+
+        else:
+            print(f"Column '{col}' not found in dataset.")
+
+    return pd.DataFrame(result)
+
+# Perform analysis
+uci_stats = univariate_analysis(uci_diabetes, numerical_columns)
+pima_stats = univariate_analysis(pima_diabetes, numerical_columns)
+
+# Display results
+print("\nUCI Diabetes Statistics")
+print(uci_stats)
+
+print("\nPima Diabetes Statistics")
+print(pima_stats)
+
+O/P:
+
+UCI Diabetes Dataset
+   Glucose  BloodPressure  SkinThickness  Insulin        BMI  \
+0      161             57             11      155  24.612080   
+1      155             77             12       30  20.529771   
+2      151             62             44      229  23.951897   
+3      177            101             20      231  27.186764   
+4       93             55             34       64  27.692443   
+
+   DiabetesPedigreeFunction  Age  Outcome  
+0                  0.434891   27        0  
+1                  0.658386   59        0  
+2                  1.514238   72        0  
+3                  0.473151   69        1  
+4                  0.925494   37        0  
+
+Pima Diabetes Dataset
+   Glucose  BloodPressure  SkinThickness  Insulin        BMI  \
+0      120             57             44      109  23.171606   
+1       92            103             22      166  24.142045   
+2      115             52             13      298  25.887689   
+3       93            105             10      160  30.673718   
+4      112            110             40       73  40.197122   
+
+   DiabetesPedigreeFunction  Age  Outcome  
+0                  1.872651   38        1  
+1                  0.530660   21        0  
+2                  2.365815   61        1  
+3                  1.157125   32        0  
+4                  1.061698   25        0  
+
+UCI Columns:
+['Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age', 'Outcome']
+
+Pima Columns:
+['Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age', 'Outcome']
+
+UCI Diabetes Statistics
+                    Feature        Mean      Median        Mode     Variance  \
+0                   Glucose  135.930000  135.500000  110.000000   931.358687   
+1             BloodPressure   81.530000   81.500000   66.000000   308.009192   
+2             SkinThickness   29.020000   28.000000   20.000000   136.080404   
+3                   Insulin  161.380000  156.000000   62.000000  6712.116768   
+4                       BMI   31.892403   32.302356   18.194153    52.028186   
+5  DiabetesPedigreeFunction    1.256532    1.100314    0.104059     0.464836   
+6                       Age   52.820000   56.000000   63.000000   360.957172   
+
+   Standard Deviation  Skewness  Kurtosis  
+0           30.518170 -0.032334 -1.212100  
+1           17.550191 -0.008680 -1.287811  
+2           11.665351  0.046299 -1.266289  
+3           81.927509  0.030974 -1.174570  
+4            7.213057 -0.115914 -0.985355  
+5            0.681789  0.267106 -1.093944  
+6           18.998873 -0.153516 -1.418308  
+
+Pima Diabetes Statistics
+                    Feature        Mean      Median        Mode     Variance  \
+0                   Glucose  137.700000  140.500000  175.000000  1030.111111   
+1             BloodPressure   77.960000   77.000000   55.000000   342.867071   
+2             SkinThickness   32.200000   33.000000   50.000000   149.575758   
+3                   Insulin  148.540000  152.500000  170.000000  7592.250909   
+4                       BMI   31.530472   30.600226   18.218645    61.243384   
+5  DiabetesPedigreeFunction    1.362710    1.298679    0.283311     0.375082   
+6                       Age   48.440000   47.000000   47.000000   291.380202   
+
+   Standard Deviation  Skewness  Kurtosis  
+0           32.095344 -0.150841 -1.217230  
+1           18.516670  0.218952 -1.258999  
+2           12.230117 -0.115062 -1.227488  
+3           87.133523  0.079204 -1.236157  
+4            7.825815  0.069633 -1.115070  
+5            0.612439  0.131830 -0.976476  
+6           17.069862  0.178426 -1.195814  
